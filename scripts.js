@@ -61,14 +61,14 @@ let postAlbum = (element,uId,t) => {
     .done(function(response){
         console.log(response);
         element.after(templateRow);
-        var tRow = $('#'+element[0].id +'+ tr').attr("id","U"+response.userId+''+response.id);
-        var temp = $('#'+element[0].id+' +tr > td').attr("id","idUser"+response.userId+''+response.id);
-        var albumTemp = $('#'+element[0].id+'+tr > td:eq(1)').attr("id","albumUser"+response.userId+''+response.id);
+        var tRow = $('#'+element[0].id +'+ tr').attr("id","U"+response.userId+''+response.title[0]);
+        var temp = $('#'+element[0].id+' +tr > td').attr("id","idUser"+response.userId+''+response.title[0]);
+        var albumTemp = $('#'+element[0].id+'+tr > td:eq(1)').attr("id","albumUser"+response.userId+''+response.title[0]);
         var userIdTemp = $('#'+element[0].id+'+tr > td:eq(2)').attr("id",response.userId);
         
-
-        $("#idUser"+response.userId+''+response.id).html(response.id);
-        $("#albumUser"+response.userId+''+response.id).html(response.title);
+        console.log("#idUser"+response.userId+''+response.title[0]);
+        $("#idUser"+response.userId+''+response.title[0]).html(response.id);
+        $("#albumUser"+response.userId+''+response.title[0]).html(response.title);
         $('#mainItem').css('display','');
         $('.loader').css('display','none');
 
