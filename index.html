@@ -12,12 +12,30 @@
 
 <body>
     <h1>Vaynermedia Front-End Code Test</h1>
-    
+    <!--
     <div class='search'>
         <label class='search__label'>Search</label>
-        <input class='search__input' type='text'></input>
+        <input type="text" id="myInput" onkeyup="myFunction('table1')" placeholder="Search for names.." title="Type in a name">
         <button class='search__button' type='submit'>Submit</button>
     </div>
+    -->
+
+    <!-- Search Link -->
+    <a class="search" href="#search">
+        <i class="fa fa-search"></i>Search Album
+    </a>
+    
+    <button class="clearFilter" style="display:none" onclick="clearSearch('t1','table1')">Clear Filter</button>
+
+        <!-- Search Form -->
+        <div id="search"> 
+            <span class="close">X</span>
+            <form role="search" id="searchform" action="/search" method="get">
+            <input class="t1" value="" id='myInput' name='q' onkeyup="searchFunc('table1')" type="search" placeholder="type to search table1"/>
+            
+            </form>
+        </div>
+    
     <div style="display:none" class="loader">Loading...</div>
     <main id="mainItem">
 

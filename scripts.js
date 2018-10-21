@@ -4,7 +4,7 @@
 
     //alert('ready!');
     //template for new table row
-const templateRow = '<tr class="event"draggable="true"><td></td><td></td><td style="display:none"></td></tr>';
+const templateRow = '<tr class="event"draggable="true"><td></td><td class="album"></td><td style="display:none"></td></tr>';
     //convert to a get
 let table = (number, number2) =>{
 
@@ -139,6 +139,46 @@ const drag = () => {
 
 
 
+//search func
+
+function searchFunc(table) {
+    var input, filter, tab,td;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+
+    tab = document.getElementById(table);
+    tr = tab.getElementsByClassName('event');
+    td = tab.getElementsByClassName("album");
+   
+    
+    for (i = 0; i < td.length; i++) {
+        
+        if (td[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+            $('.search').css('display','none'); 
+            $('.clearFilter').css('display','');
+        }
+    }
+
+
+}
+
+//************************************************************************
+// clear search func
+function clearSearch(id, table){
+    console.log($('.'+id).val());
+    $('.'+id).val('');
+    var tab = document.getElementById(table);
+    var tr = tab.getElementsByClassName('event');
+    for(i=0;i<tr.length;i++){
+        tr[i].style.display = "";
+    }
+    $('.clearFilter').css('display','none'); 
+    $('.search').css('display','');
+}
+
   table(3,2);
  
 
@@ -147,7 +187,15 @@ const drag = () => {
 $(document).ready(function(){
     
 
-  
+  $('a[href="#search"]').on('click', function(event) {                    
+        $('#search').addClass('open');
+        $('#search > form > input[type="search"]').focus();
+    });            
+    $('#search, #search button.close').on('click keyup', function(event) {
+        if (event.target == this || event.target.className == 'close' || event.keyCode == 27) {
+            $(this).removeClass('open');
+        }
+    });     
 
      
 
