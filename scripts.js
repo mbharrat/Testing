@@ -58,14 +58,14 @@ let table = (number, number2) =>{
 let postAlbum = (element,uId,t) => {
     $.post("https://jsonplaceholder.typicode.com/posts", { "userId": uId.toString(), "title": t.toString() })
     .done(function(response){
-        console.log(response);
+       // console.log(response);
         element.after(templateRow);
         var tRow = $('#'+element[0].id +'+ tr').attr("id","U"+response.userId+''+response.title[0]);
         var temp = $('#'+element[0].id+' +tr > td').attr("id","idUser"+response.userId+''+response.title[0]);
         var albumTemp = $('#'+element[0].id+'+tr > td:eq(1)').attr("id","albumUser"+response.userId+''+response.title[0]);
         var userIdTemp = $('#'+element[0].id+'+tr > td:eq(2)').attr("id",response.userId);
         
-        console.log("#idUser"+response.userId+''+response.title[0]);
+        //console.log("#idUser"+response.userId+''+response.title[0]);
         $("#idUser"+response.userId+''+response.title[0]).html(response.id);
         $("#albumUser"+response.userId+''+response.title[0]).html(response.title);
         $('#mainItem').css('display','');
@@ -107,7 +107,12 @@ const drag = () => {
                 
             if (event.type == 'drop') {
                 var data = event.originalEvent.dataTransfer.getData('Text', $(this).attr('id'));
-
+                var test = $('.selectedRow');
+                //console.log(test);
+               // if(test != undefined){
+               //     console.log('found one');
+               // }
+                
                 de = $('#' + data).detach(); 
                 
                
@@ -119,12 +124,24 @@ const drag = () => {
                 }else {
                     
                     var item = $('#'+$(this)[0].id);
-                    console.log(data);
+                    //console.log(data);
                     $('#mainItem').css('display','none');
                     $('.loader').css('display','');
                     var userId = item[0].childNodes[2].id
+                    console.log(de);
                     var title = de[0].childNodes[1].innerHTML
                     postAlbum(item,userId, title);
+                    
+                    if(test !=undefined){
+                        for(i=0;i<test.length;i++){
+                            title = test[i].childNodes[1].innerHTML
+                            postAlbum(item,userId,title);
+
+                        }
+                    }
+                    
+                    
+                    
                     var unAnimate= $(this).parent().parent()[0].id;
                     $('#'+unAnimate).removeClass('shake');
                    // $(this).after(de);
@@ -161,8 +178,8 @@ function searchFunc(table, input, clearFilter, search) {
 
         }
     }
-    console.log('.'+search);
-    console.log(clearFilter);
+    //console.log('.'+search);
+    //console.log(clearFilter);
 
 
 }
@@ -170,7 +187,7 @@ function searchFunc(table, input, clearFilter, search) {
 //************************************************************************
 // clear search func
 function clearSearch(id, table, clearFilter, search){
-    console.log($('.'+id).val());
+    //console.log($('.'+id).val());
     $('.'+id).val('');
     var tab = document.getElementById(table);
     var tr = tab.getElementsByClassName('event');
@@ -203,6 +220,16 @@ function hackClose(table1,table2){
    window.location=document.getElementsByClassName('popup__close')[0].href;
 
 }
+
+
+//toggle
+     $(document).on("click", ".event", function () {
+            //console.log($(this)[0])
+            $(this).toggleClass("selectedRow");
+});
+
+
+//
   table(3,2);
 
  
@@ -229,6 +256,7 @@ $(document).ready(function(){
     });     
 
      
+
 
 
    

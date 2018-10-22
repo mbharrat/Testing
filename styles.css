@@ -9,6 +9,13 @@ main {
     justify-content: space-between;
 }
 
+.selectedRow{
+    outline-width: 10px;
+    outline: solid 5px #FFFF00;
+    transition: outline 0.6s linear;
+}
+
+
 
 #second {
     display:inline-block;
@@ -80,6 +87,7 @@ table.mytable {
     border-top:1px solid #fafafa;
     border-bottom:1px solid #e0e0e0;
     background:#6C3483;
+
 }
 .mytable th:first-child {
     text-align: center;
@@ -88,12 +96,14 @@ table.mytable {
 .mytable tr {
     text-align: center;
     padding-left:20px;
+    
 }
 .mytable tr td:first-child {
     text-align: center;
     padding-left:20px;
     border-left: 0;
 }
+
 .mytable tr td {
     padding:18px;
     border-top: 1px solid #ffffff;
@@ -104,9 +114,11 @@ table.mytable {
     background: -moz-linear-gradient(top, #fbfbfb, #fafafa);
 }
 
+
 .mytable tr:nth-child(even) td{
     background: #D2B4DE;
 }
+
 .mytable tr.even td {
     background: #f6f6f6;
     background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6 f6));
@@ -302,6 +314,10 @@ a:hover:before{
   -webkit-animation: load6 1.7s infinite ease, round 1.7s infinite ease;
   animation: load6 1.7s infinite ease, round 1.7s infinite ease;
 }
+
+
+
+
 @-webkit-keyframes load6 {
   0% {
     box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
@@ -469,4 +485,8 @@ legend {
   cursor: pointer;
   text-decoration: none;
 }
+
+
+
+
 
