@@ -21,20 +21,72 @@
     -->
 
     <!-- Search Link -->
+    <div class="box">
     <a class="search" href="#search">
         <i class="fa fa-search"></i>Search Album
     </a>
-    
-    <button class="clearFilter" style="display:none" onclick="clearSearch('t1','table1')">Clear Filter</button>
+    <button class="clearFilter" style="display:none" onclick="clearSearch('t1','table1','clearFilter','search')">Clear Filter</button>
+    <div>
+        <a href="#popup">Switch Users</a>
+            <div class="popup" id="popup">
+                
+                    <div class="popup-inner">
+                    <div class="form">
+                        
+                        <h1>Update Tables</h1>
+
+                        <legend><span class="number"></span> Enter User Numbers</legend>
+                        <label for="name">Table One:</label>
+                        <input type="number" id="Table1User" name="Table_1_User">
+                        <hr>
+                        <label for="name">Table Two:</label>
+                        <input type="number" id="Table2User" name="Table_2_User">
+
+  
+                        <button class="switchUser" onclick="hackClose(document.getElementById('Table1User').value,document.getElementById('Table2User').value)" type="submit">Submit</button>
+                        <a class="popup__close" href="#">X</a>
+                    
+                    </div>
+                </div>
+                    
+                </div>
+            
+    </div>
+    <a class="search2" href="#search2">
+        <i class="fa fa-search"></i>Search Album
+    </a>
+    <button class="clearFilter2" style="display:none" onclick="clearSearch('t2','table2','clearFilter2','search2')">Clear Filter</button>
 
         <!-- Search Form -->
         <div id="search"> 
             <span class="close">X</span>
             <form role="search" id="searchform" action="/search" method="get">
-            <input class="t1" value="" id='myInput' name='q' onkeyup="searchFunc('table1')" type="search" placeholder="type to search table1"/>
+            <input class="t1" value="" id='myInput' name='q' onkeyup="searchFunc('table1','myInput','clearFilter','search')" type="search" placeholder="type to search table1"/>
             
             </form>
         </div>
+
+
+
+         <div id="search2"> 
+            <span class="close">X</span>
+            <form role="search" id="searchform2" action="/search2" method="get">
+            <input class="t2" value="" id='myInput2' name='q' onkeyup="searchFunc('table2','myInput2','clearFilter2', 'search2')" type="search" placeholder="type to search table2"/>
+            
+            </form>
+        </div>
+   
+
+
+     
+    
+
+        <!-- Search Form -->
+       
+    </div>
+
+    <!--modal-->
+
     
     <div style="display:none" class="loader">Loading...</div>
     <main id="mainItem">

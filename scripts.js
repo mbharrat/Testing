@@ -7,7 +7,6 @@
 const templateRow = '<tr class="event"draggable="true"><td></td><td class="album"></td><td style="display:none"></td></tr>';
     //convert to a get
 let table = (number, number2) =>{
-
 	$.get("https://jsonplaceholder.typicode.com/albums?userId="+number, function(response){
     	$('#mainItem').css('display','none');
         $('.loader').css('display','');
@@ -141,9 +140,9 @@ const drag = () => {
 
 //search func
 
-function searchFunc(table) {
+function searchFunc(table, input, clearFilter, search) {
     var input, filter, tab,td;
-    input = document.getElementById("myInput");
+    input = document.getElementById(input);
     filter = input.value.toUpperCase();
 
     tab = document.getElementById(table);
@@ -157,17 +156,20 @@ function searchFunc(table) {
             tr[i].style.display = "";
         } else {
             tr[i].style.display = "none";
-            $('.search').css('display','none'); 
-            $('.clearFilter').css('display','');
+            $('.'+search).css('display','none'); 
+            $('.'+clearFilter).css('display','');
+
         }
     }
+    console.log('.'+search);
+    console.log(clearFilter);
 
 
 }
 
 //************************************************************************
 // clear search func
-function clearSearch(id, table){
+function clearSearch(id, table, clearFilter, search){
     console.log($('.'+id).val());
     $('.'+id).val('');
     var tab = document.getElementById(table);
@@ -175,11 +177,34 @@ function clearSearch(id, table){
     for(i=0;i<tr.length;i++){
         tr[i].style.display = "";
     }
-    $('.clearFilter').css('display','none'); 
-    $('.search').css('display','');
+    $('.'+clearFilter).css('display','none'); 
+    $('.'+search).css('display','');
 }
+//************************************************************************
+//hacky way to go home
+function hackClose(table1,table2){
+    //table()
+    //console.log($(".connectedSortable").children());
+    var one = $(".connectedSortable")[0].children;
+    const lengthOne = one.length;
+    var two = $(".connectedSortable2")[0].children;
+    const twoLength = two.length;
+    //console.log(one.length);
+    for(i=1;i<lengthOne;i++){
+        one[1].remove();
+        
+    }
+    
+    for(i=1;i<twoLength;i++){
+        two[1].remove();
+    }
+    
+    table(table1,table2);
+   window.location=document.getElementsByClassName('popup__close')[0].href;
 
+}
   table(3,2);
+
  
 
 
@@ -190,8 +215,14 @@ $(document).ready(function(){
   $('a[href="#search"]').on('click', function(event) {                    
         $('#search').addClass('open');
         $('#search > form > input[type="search"]').focus();
-    });            
-    $('#search, #search button.close').on('click keyup', function(event) {
+    });
+
+
+    $('a[href="#search2"]').on('click', function(event) {                    
+        $('#search2').addClass('open');
+        $('#search2 > form > input[type="search"]').focus();
+    });             
+    $('#search, #search button.close, #search2, #search2 button.close').on('click keyup', function(event) {
         if (event.target == this || event.target.className == 'close' || event.keyCode == 27) {
             $(this).removeClass('open');
         }
