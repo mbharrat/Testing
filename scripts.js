@@ -1,25 +1,33 @@
+//
+//-----------------------------------------------------------------
+//  dynamic tr template
+//-----------------------------------------------------------------
 
-
-
-
-    //alert('ready!');
-    //template for new table row
 const templateRow = '<tr class="event"draggable="true"><td></td><td class="album"></td><td style="display:none"></td></tr>';
-    //convert to a get
+
+//-----------------------------------------------------------------
+
+
+
+//-----------------------------------------------------------------
+//          created a variable for the double get (reload table with specific users)
+//-----------------------------------------------------------------
+
 let table = (number, number2) =>{
-	$.get("https://jsonplaceholder.typicode.com/albums?userId="+number, function(response){
-    	$('#mainItem').css('display','none');
+    $.get("https://jsonplaceholder.typicode.com/albums?userId="+number, function(response){
+        $('#mainItem').css('display','none');
         $('.loader').css('display','');
     
     }).done(function(response){
         for(album in response){
-        	 $(".connectedSortable").append(templateRow);
-        	 var tRow = $('.connectedSortable > tr:eq('+(parseInt(album, 10)+1)+')').attr("id","U"+number+''+album);
-        	 var temp = $('.connectedSortable > tr:eq('+(parseInt(album, 10)+1)+') > td').attr("id","idUser"+number+''+album);
-        	 var albumTemp = $('.connectedSortable > tr:eq('+(parseInt(album, 10)+1)+') > td:eq(1)').attr("id","albumUser"+number+''+album);
+             $(".connectedSortable").append(templateRow);
+             var tRow = $('.connectedSortable > tr:eq('+(parseInt(album, 10)+1)+')').attr("id","U"+number+''+album);
+             var temp = $('.connectedSortable > tr:eq('+(parseInt(album, 10)+1)+') > td').attr("id","idUser"+number+''+album);
+             var albumTemp = $('.connectedSortable > tr:eq('+(parseInt(album, 10)+1)+') > td:eq(1)').attr("id","albumUser"+number+''+album);
             var userIdTemp = $('.connectedSortable > tr:eq('+(parseInt(album, 10)+1)+') > td:eq(2)').attr("id",response[album].userId);
-        	 $("#idUser"+number+''+album).html(response[album].id);
-        	 $("#albumUser"+number+''+album).html(response[album].title);
+             $("#idUser"+number+''+album).html(response[album].id);
+             $("#albumUser"+number+''+album).html(response[album].title);
+             $("#labelTable1").html("User "+response[album].userId);
      
         }
 
@@ -38,22 +46,24 @@ let table = (number, number2) =>{
                  var userIdTemp = $('.connectedSortable2 > tr:eq('+(parseInt(album, 10)+1)+') > td:eq(2)').attr("id",response[album].userId);
                  $("#idUser"+number2+''+album).html(response[album].id);
                  $("#albumUser"+number2+''+album).html(response[album].title);
+                 $("#labelTable2").html("User "+response[album].userId);
      
             }
-            drag()
-    
-    //add css
-    
-    
+            drag()    
     });
-
         
     })
     
 
 };
 
-//post function
+//-----------------------------------------------------------------
+
+
+//-----------------------------------------------------------------
+//              anonymous function stored in var to send out a get
+//-----------------------------------------------------------------
+
 
 let postAlbum = (element,uId,t) => {
     $.post("https://jsonplaceholder.typicode.com/posts", { "userId": uId.toString(), "title": t.toString() })
@@ -71,15 +81,18 @@ let postAlbum = (element,uId,t) => {
         $('#mainItem').css('display','');
         $('.loader').css('display','none');
 
-        //reset handler?
+        //reset handler
         drag();
-    
-        
         
     });
 };
+//-----------------------------------------------------------------
 
+
+//-----------------------------------------------------------------
 //set up my dragging handlers
+//-----------------------------------------------------------------
+
 const drag = () => {
 
         $('.event').on("dragstart", function (event) {
@@ -96,8 +109,7 @@ const drag = () => {
                 animate="table1";
             }
             $('#'+animate).addClass('shake');
-            //animate.addClass('shake');
-            //console.log(animate);
+            
          
         });
 
@@ -107,55 +119,66 @@ const drag = () => {
                 
             if (event.type == 'drop') {
                 var data = event.originalEvent.dataTransfer.getData('Text', $(this).attr('id'));
-                var test = $('.selectedRow');
-                //console.log(test);
-               // if(test != undefined){
-               //     console.log('found one');
-               // }
-                
+                var selectedRow = $('.selectedRow');
                 de = $('#' + data).detach(); 
                 
-               
-                //console.log(event.originalEvent.target);
-                if (event.originalEvent.target.tagName == "TR") {
-                    //console.log(event.originalEvent.target);
-                    console.log("hit");
-                    //de.insertBefore($(event.originalEvent.target));
+               console.log(event.originalEvent.target.tagName);
+                
+                
+                if (event.originalEvent.target.tagName == "TH") {
+                    console.log($(this));
+                    var item = $(this)[0];
+
+
+        
+
+
+
                 }else {
-                    
+                    console.log("no no");
                     var item = $('#'+$(this)[0].id);
-                    //console.log(data);
+                }  
                     $('#mainItem').css('display','none');
                     $('.loader').css('display','');
                     var userId = item[0].childNodes[2].id
-                    console.log(de);
-                    var title = de[0].childNodes[1].innerHTML
-                    postAlbum(item,userId, title);
+                   
+                    if(de[0] !== undefined){
+                        var title = de[0].childNodes[1].innerHTML
+                        postAlbum(item,userId, title);      //@AJAX
+                    }
                     
-                    if(test !=undefined){
-                        for(i=0;i<test.length;i++){
-                            title = test[i].childNodes[1].innerHTML
-                            postAlbum(item,userId,title);
+                    console.log(de[0].childNodes[1].innerHTML);
+                    if(selectedRow !=undefined){
+                        for(i=0;i<selectedRow.length;i++){
+                            
+                            title = selectedRow[i].childNodes[1].innerHTML
+
+                            if(de[0].childNodes[1].innerHTML == title){
+                                continue;
+                            }
+                            postAlbum(item,userId,title);     //@AJAX
+                            selectedRow[i].remove();
 
                         }
                     }
                     
-                    
-                    
                     var unAnimate= $(this).parent().parent()[0].id;
                     $('#'+unAnimate).removeClass('shake');
-                   // $(this).after(de);
-
                     
-                }
+                
             };
 
         });
 };
+//-----------------------------------------------------------------
 
 
 
-//search func
+
+
+//-----------------------------------------------------------------
+//              search functions for the input boxes
+//-----------------------------------------------------------------
 
 function searchFunc(table, input, clearFilter, search) {
     var input, filter, tab,td;
@@ -172,22 +195,79 @@ function searchFunc(table, input, clearFilter, search) {
         if (td[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
             tr[i].style.display = "";
         } else {
+
             tr[i].style.display = "none";
             $('.'+search).css('display','none'); 
             $('.'+clearFilter).css('display','');
-
         }
+        
     }
-    //console.log('.'+search);
-    //console.log(clearFilter);
-
 
 }
+//-----------------------------------------------------------------
 
-//************************************************************************
-// clear search func
+
+
+//-----------------------------------------------------------------
+//          manual candy stripe for hidden rows when filter is active (it's hacky but works for now)
+//-----------------------------------------------------------------
+
+function reStripe(tr){
+    
+    var k =0;
+    for(i=0;i<tr.length;i++){
+        
+        if(tr[i].style.display==""){
+            k++;
+            
+            var deepNest = tr[i].children;
+            if(k%2==1){
+                deepNest[0].style.backgroundColor="#D2B4DE"
+                deepNest[1].style.backgroundColor="#D2B4DE"
+                deepNest[2].style.backgroundColor="#D2B4DE"
+            }else{
+                deepNest[0].style.backgroundColor="#f6f6f6"
+                deepNest[1].style.backgroundColor="#f6f6f6"
+                deepNest[2].style.backgroundColor="#f6f6f6"
+            }
+                        
+           
+        }
+
+    }
+   
+}
+//-----------------------------------------------------------------
+
+
+
+
+
+//-----------------------------------------------------------------
+//              take off filtering so put styling back to how css wants it
+//-----------------------------------------------------------------
+
+function cleanStripe(tr){
+    for(i=0;i<tr.length;i++){
+
+            var deepNest = tr[i].children;
+            
+                deepNest[0].style.backgroundColor=""
+                deepNest[1].style.backgroundColor=""
+                deepNest[2].style.backgroundColor=""
+            
+           
+            
+        }
+}
+//-----------------------------------------------------------------
+
+
+//-----------------------------------------------------------------
+//              clear out the filter (when clear button is hit)
+//-----------------------------------------------------------------
+
 function clearSearch(id, table, clearFilter, search){
-    //console.log($('.'+id).val());
     $('.'+id).val('');
     var tab = document.getElementById(table);
     var tr = tab.getElementsByClassName('event');
@@ -196,12 +276,14 @@ function clearSearch(id, table, clearFilter, search){
     }
     $('.'+clearFilter).css('display','none'); 
     $('.'+search).css('display','');
+    cleanStripe($('.event'));
 }
-//************************************************************************
-//hacky way to go home
+//-----------------------------------------------------------------
+
+//-----------------------------------------------------------------
+//          hacky way to go back home from modal
 function hackClose(table1,table2){
-    //table()
-    //console.log($(".connectedSortable").children());
+    
     var one = $(".connectedSortable")[0].children;
     const lengthOne = one.length;
     var two = $(".connectedSortable2")[0].children;
@@ -216,21 +298,14 @@ function hackClose(table1,table2){
         two[1].remove();
     }
     
-    table(table1,table2);
+   table(table1,table2);       //@AJAX
    window.location=document.getElementsByClassName('popup__close')[0].href;
 
 }
 
+//-----------------------------------------------------------------
 
-//toggle
-     $(document).on("click", ".event", function () {
-            //console.log($(this)[0])
-            $(this).toggleClass("selectedRow");
-});
-
-
-//
-  table(3,2);
+  
 
  
 
@@ -238,6 +313,25 @@ function hackClose(table1,table2){
 
 $(document).ready(function(){
     
+//-----------------------------------------------------------------
+//         THESE LOAD AFTER PAGE LOADS TO PREVENT WEIRD BEHAVIORS
+//-----------------------------------------------------------------
+
+
+//-----------------------------------------------------------------
+//      let's initiliaze the table to start
+//-----------------------------------------------------------------
+
+table(3,2);     //@AJAX
+
+//-----------------------------------------------------------------
+
+
+
+
+//-----------------------------------------------------------------
+//      set up search for functionality
+//-----------------------------------------------------------------
 
   $('a[href="#search"]').on('click', function(event) {                    
         $('#search').addClass('open');
@@ -252,12 +346,26 @@ $(document).ready(function(){
     $('#search, #search button.close, #search2, #search2 button.close').on('click keyup', function(event) {
         if (event.target == this || event.target.className == 'close' || event.keyCode == 27) {
             $(this).removeClass('open');
+            reStripe($('.event'));
+
         }
-    });     
-
-     
-
+    }); 
+//-----------------------------------------------------------------
 
 
-   
+
+
+//-----------------------------------------------------------------
+//              set up click handler for selecting Row
+//-----------------------------------------------------------------
+    $(document).on("click", ".event", function () {
+            //console.log($(this)[0])
+            $(this).toggleClass("selectedRow");
+    });   
+//-----------------------------------------------------------------
+
+
+
+
+       
 });

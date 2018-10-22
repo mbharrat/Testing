@@ -115,7 +115,7 @@ table.mytable {
 }
 
 
-.mytable tr:nth-child(even) td{
+.mytable .event:nth-child(even) td{
     background: #D2B4DE;
 }
 
