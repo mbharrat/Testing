@@ -87,7 +87,27 @@ let postAlbum = (element,uId,t) => {
     });
 };
 //-----------------------------------------------------------------
+let postAlbum2 = (table,uId,t) => {
+    $.post("https://jsonplaceholder.typicode.com/posts", { "userId": uId.toString(), "title": t.toString() })
+    .done(function(response){
+       // console.log(response);
+        table.after(templateRow);
+        var tRow = $('.'+table[0].className +'+ tr').attr("id","U"+response.userId+''+response.title[0]);
+        var temp = $('.'+table[0].className+' +tr > td').attr("id","idUser"+response.userId+''+response.title[0]);
+        var albumTemp = $('.'+table[0].className+'+tr > td:eq(1)').attr("id","albumUser"+response.userId+''+response.title[0]);
+        var userIdTemp = $('.'+table[0].className+'+tr > td:eq(2)').attr("id",response.userId);
+        
+        console.log($('#'+table[0].className +'+ tr'))
+        $("#idUser"+response.userId+''+response.title[0]).html(response.id);
+        $("#albumUser"+response.userId+''+response.title[0]).html(response.title);
+        $('#mainItem').css('display','');
+        $('.loader').css('display','none');
 
+        //reset handler
+        drag();
+        
+    });
+};
 
 //-----------------------------------------------------------------
 //set up my dragging handlers
@@ -122,32 +142,67 @@ const drag = () => {
                 var selectedRow = $('.selectedRow');
                 de = $('#' + data).detach(); 
                 
-               console.log(event.originalEvent.target.tagName);
+               
                 
                 
                 if (event.originalEvent.target.tagName == "TH") {
+                    
+
+                    
+                    var item = $(this)
                     console.log($(this));
-                    var item = $(this)[0];
 
+                    if(item === "table2"){
+                        var userId = $("#labelTable2").html();
+                        userId = userId[userId.length-1]
+                        
+                    }else{
+                        var userId = $("#labelTable1").html();
+                        userId = userId[userId.length-1]
+                    }
 
+                     $('#mainItem').css('display','none');
+                    $('.loader').css('display','');
+                      
+                    if(de[0] !== undefined){
+                        var title = de[0].childNodes[1].innerHTML
+                        postAlbum2(item,userId, title);      //@AJAX
+                    }
+                    
+                    
+                    if(selectedRow !=undefined){
+                        for(i=0;i<selectedRow.length;i++){
+                            
+                            title = selectedRow[i].childNodes[1].innerHTML
+
+                            if(de[0].childNodes[1].innerHTML == title){
+                                continue;
+                            }
+                            postAlbum2(item,userId,title);     //@AJAX
+                            selectedRow[i].remove();
+
+                        }
+                    }
         
 
 
 
                 }else {
-                    console.log("no no");
+                    
                     var item = $('#'+$(this)[0].id);
-                }  
+                    var userId = item[0].childNodes[2].id
+                    console.log(item);
+                
                     $('#mainItem').css('display','none');
                     $('.loader').css('display','');
-                    var userId = item[0].childNodes[2].id
+                    
                    
                     if(de[0] !== undefined){
                         var title = de[0].childNodes[1].innerHTML
                         postAlbum(item,userId, title);      //@AJAX
                     }
                     
-                    console.log(de[0].childNodes[1].innerHTML);
+                    
                     if(selectedRow !=undefined){
                         for(i=0;i<selectedRow.length;i++){
                             
@@ -161,9 +216,14 @@ const drag = () => {
 
                         }
                     }
+                
+                    //var unAnimate= $(this).parent().parent()[0].id;
+                    //cool way to get opposite table
                     
-                    var unAnimate= $(this).parent().parent()[0].id;
-                    $('#'+unAnimate).removeClass('shake');
+                    
+                }
+                $('#table1').removeClass('shake');
+                $('#table2').removeClass('shake');
                     
                 
             };
@@ -322,7 +382,7 @@ $(document).ready(function(){
 //      let's initiliaze the table to start
 //-----------------------------------------------------------------
 
-table(3,2);     //@AJAX
+table(1,2);     //@AJAX
 
 //-----------------------------------------------------------------
 
